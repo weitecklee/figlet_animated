@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if ! [[ "$FPS" =~ ^[0-9]+$ ]] || [ "$FPS" -le 0 ]; then
+  echo "Error: FPS must be a positive integer."
+  exit 1
+fi
+
+DELAY=$(echo "scale=4; 1 / $FPS" | bc)
 TEMP_FILE=$(mktemp)
 figlet -c -f /usr/share/fonts/3d.flf $* > "$TEMP_FILE"
 
@@ -24,5 +30,5 @@ while true; do
   if [ "$i" -gt 509 ]; then
     i=0
   fi
-  sleep .1
+  sleep $DELAY
 done
