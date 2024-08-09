@@ -1,6 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
-if ! [[ "$WAIT" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+echo "$WAIT" | grep -Eq '^[0-9]+([.][0-9]+)?$'
+if [ $? -ne 0 ]; then
   echo "Error: WAIT must be a non-negative number."
   exit 1
 fi
@@ -25,13 +26,13 @@ cleanup() {
   exit
 }
 
-trap cleanup INT TERM EXIT
+trap 'cleanup' INT TERM EXIT
 
 i=0
 
 while true; do
   lolcat -f -o "$i" "$TEMP_FILE"
-  ((i++))
+  i=$(expr $i + 1)
   if [ "$i" -gt 509 ]; then
     i=0
   fi
