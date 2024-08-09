@@ -1,11 +1,10 @@
 #!/bin/bash
 
-if ! [[ "$FPS" =~ ^[0-9]+$ ]] || [ "$FPS" -le 0 ]; then
-  echo "Error: FPS must be a positive integer."
+if ! [[ "$WAIT" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+  echo "Error: WAIT must be a non-negative number."
   exit 1
 fi
 
-DELAY=$(echo "scale=4; 1 / $FPS" | bc)
 TEMP_FILE=$(mktemp)
 figlet -c -f /usr/share/fonts/3d.flf "$*" > "$TEMP_FILE"
 
@@ -40,5 +39,5 @@ while true; do
   # Move cursor up by number of lines in TEMP_FILE then to beginning of current line
   printf "\033[%dA\033[G" "$LINE_COUNT"
 
-  sleep $DELAY
+  sleep "$WAIT"
 done
